@@ -40,7 +40,7 @@ def get_currency_rate():
     except Exception:
         return "💵 Currency rate data currently unavailable"
 
-# --- FUNCTION 3: Build the summary ---
+# --- FUNCTION 4: Build the summary ---
 def build_summary():
     weather_data = get_weather()
     quote_data = get_quote()
