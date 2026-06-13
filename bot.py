@@ -28,30 +28,40 @@ def get_quote():
         return f'"{quote}" - {author}'
     except Exception as e:
         return f"Quote unavailable ({e})"
+    
+# --- FUNCTION 3:Get currency rate  ---
+
+def get_currency_rate():
+    try:
+        response = requests.get("https://open.er-api.com/v6/latest/USD")
+        data = response.json()
+        inr_rate = data["rates"]["INR"]
+        return f"💵 1 USD = {inr_rate:.2f} INR"
+    except Exception:
+        return "💵 Currency rate data currently unavailable"
 
 # --- FUNCTION 3: Build the summary ---
 def build_summary():
-    """Assemble the full daily summary from all data sources."""
-    today = date.today().strftime("%A, %d %B %Y")  # e.g., Monday, 09 June 2026
-    weather = get_weather()
-    quote = get_quote()
+    weather_data = get_weather()
+    quote_data = get_quote()
+    currency_data = get_currency_rate() # Calling the third data source
     
-    # Triple-quoted strings span multiple lines—great for formatted output
-    summary = f"""
-==========
+    # Adding the new data blank to the f-string template
+    summary = f"""==========
 PULSE Daily Summary
-{today}
 ==========
 
 WEATHER
-{weather}
+{weather_data}
+
+FINANCE
+{currency_data}
 
 TODAY'S QUOTE
-{quote}
+{quote_data}
 """
     return summary
-
-# --- FUNCTION 4: Run everything ---
+# --- FUNCTION 5: Run everything ---
 def run():
     """Main entry point. Called by GitHub Actions."""
     summary = build_summary()
